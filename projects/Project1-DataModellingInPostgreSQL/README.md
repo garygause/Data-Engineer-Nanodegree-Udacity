@@ -17,7 +17,7 @@ Our goal is to design a database in postgres and perform ETL actions on the data
 
 - What is the most popular song played?
 - What artist has the most songs played?
-- What if the favorite artist for a particular user?  Favorite song?
+- What is the favorite artist for a particular user?  Favorite song?
 - What is the average amount of time spent by users?
 - What is the most active user on the service?
 
@@ -30,7 +30,8 @@ If you wish to run this code locally, I recommend either installing postgres loc
 - Add "student" user with password "student" and grant createdb role.
 - Test login (psql -U student -d studentdb -W)
 
-In addition, you will want to install jupyter to run the notebooks.
+In addition, you will want to install jupyter to run the notebooks, install a virtualenv (python3 -m venv env), and install the modules in requirements.txt (pip install -r requirements.txt).
+
 
 ## Project Files
 
@@ -52,11 +53,17 @@ The following files can be found in this project.
    
 ## Schema
 
-The following schema was implemented to support the business (project) needs.
+The following schema was implemented to support the business (project) needs.  
+
+TEXT fields are used over fixed length VARCHAR(n) type fields to avoid the performance hit of length comparison.  
+
+TIMESTAMP fields are used for data manipulatio.  
 
 ### songplays
 
 Fact table with records in log data associated with song plays i.e. records with page NextSong
+
+NOTE: we do not always have artist or song info in the log files.
 
 | COLUMN  	| TYPE  	| NULL     | KEY   	 |
 |---	        |---	        |---       |---          |
@@ -75,6 +82,8 @@ Fact table with records in log data associated with song plays i.e. records with
 
 Dimension table with users in the app.
 
+NOTE: CHAR(1) is used for gender field to ensure consistent format, "M|F", allowing the field to be truncated automatically if something like "Female" is entered.
+
 | COLUMN  	| TYPE  	| NULL      | KEY   	|
 |---	        |---	        |---	    |---        |	
 |   user_id	| INT  	        | NOT NULL  |   PRIMARY KEY	| 
@@ -87,6 +96,8 @@ Dimension table with users in the app.
 ### songs
 
 Dimension table with songs in the music database.
+
+NOTE: INDEX added to artist_id for more efficient JOINS.
 
  | COLUMN  	| TYPE  	| NULL      | KEY   	|
 |---	        |---	        |---	    |---        |	
@@ -114,6 +125,8 @@ Dimension table with artists in the music database.
 
 Dimension table with timestamps of records in songplays broken down into specific units.
 
+NOTE: All fields are NOT NULL because we calculate all values off start_time prior to insert.
+
  | COLUMN  	| TYPE  	| NULL      | KEY   	|
 |---	        |---	        |---	    |---        |	
 |   start_time	| TIMESTAMP  	| NOT NULL  |   PRIMARY KEY	| 
@@ -128,5 +141,6 @@ Dimension table with timestamps of records in songplays broken down into specifi
 ## See Also
 
 - [Million Song Dataset](https://labrosa.ee.columbia.edu/millionsong/)
+- [Data Engineer - Udacity](https://www.udacity.com/course/data-engineer-nanodegree--nd027)
 
 
