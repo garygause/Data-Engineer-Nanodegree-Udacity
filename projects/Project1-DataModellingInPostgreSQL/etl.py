@@ -4,8 +4,17 @@ import psycopg2
 import pandas as pd
 from sql_queries import *
 
-
 def process_song_file(cur, filepath):
+    """Process one song file from the Million Song Dataset.
+
+    Parameters
+    ----------
+    cur  :  cursor
+        Postgres database cursor.
+    filepath  :  string
+        Path to the file to be read in json format.
+    """
+
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -19,6 +28,16 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """Process one user activity log file.
+
+    Parameters
+    ----------
+    cur  :  cursor
+        Postgres database cursor.
+    filepath  :  string
+        Path to the file to be read in json format.
+    """
+
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -60,6 +79,20 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """Process all files in a specific path, i.e. song or log files.
+
+    Parameters
+    ----------
+    cur  :  cursor
+        Postgres database cursor.
+    conn  :  connection
+        Connection to the postgres database.
+    filepath  :  string
+        Base path to a directory of files.
+    func  :  function
+        Function for processing one file.
+    """
+
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -79,6 +112,8 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    # Run the full ETL process to load and insert all data from the song and log files.
+
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 

@@ -5,7 +5,8 @@ Data Engineer Project 1 - Sparkify Music Database in PostgreSQL
 2. Initial Setup
 3. Project Files
 4. Schema
-5. See Also
+5. ETL Pipeline
+6. See Also
 
 ## Overview
 
@@ -136,6 +137,18 @@ NOTE: All fields are NOT NULL because we calculate all values off start_time pri
 |   month	|  INT   	| NOT NULL  |  	| 
 |   year	|  INT   	| NOT NULL  |  	| 
 |   weekday	|  INT   	| NOT NULL  |  	| 
+
+
+## ETL Pipline
+
+The ETL pipeline loads and inserts all the data in the songs data files, and load and inserts all the extracted user, songplay, and time data.
+
+To run the code in this project, do the following:
+
+- python create_tables.py: to drop any existing tables and create them
+- python etl.py: to load and process all the log files
+- jupyter notebook test.ipynb: to run the test notebook for checking the data is loaded properly in the database
+
 
 
 ## See Also
